@@ -15,20 +15,31 @@ class BlogController extends AbstractController
 {
     #[Route('/', name: 'app_blog', defaults: ['page' => '1'], methods: ['GET'])]
     #[Route('/page/{page<[1-9]\d{0,8}>}', name: 'app_blog_page', methods: ['GET'])]
-    public function index(int $page, PostRepository $posts): Response
+    public function index(Request $request, int $page, PostRepository $posts): Response
     {
+        $offset = max(0, $request->query->getInt('offset', 0));
+        $paginator = $PostRepository->getPostRepository($post, $offset);
+
         $latestPosts = $posts->findAll();
         return $this->render('blog/index.html.twig', [
-            'publications' => $latestPosts,
+            'publication'=>$post,
+            'comments'=>$paginator,
+            'previous'=>$offset - PostRepository::PAGINATOR_PER_PAGE,
+            'next' => min(count($paginator), $offset + PostRepository::PAGINATOR_PER_PAGE),
         ]);
     }
 
     #[Route('/publication/{id}', name: 'publication')]
-    public function show(Post $post, CommentRepository $commentRepository): Response{
+    public function show(Request $request, Post $post, CommentRepository $commentRepository): Response{
+        $offset = max(0, $request->query->getInt('offset', 0));
+        $paginator = $commentRepository->getCommentPaginator($post, $offset);
+
         return $this->render('blog/show.html.twig',
-        ['publication'=>$post,
-            'comments'=>$commentRepository->findBy(['post'=>$post],
-            ['publishedAt'=>'DESC']),
+        [
+            'publication'=>$post,
+            'comments'=>$paginator,
+            'previous'=>$offset - CommentRepository::PAGINATOR_PER_PAGE,
+            'next' => min(count($paginator), $offset + CommentRepository::PAGINATOR_PER_PAGE),
             ]);
     }
 
