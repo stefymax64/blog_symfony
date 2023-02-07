@@ -37,6 +37,12 @@ class Tag
         return $this;
     }
 
+    //Méthode magique pour rendre les objets de la classe imprimables
+    public function __toString()
+    {
+        return $this->name;
+    }
+
     public function getPost(): ?Post
     {
         return $this->post;
