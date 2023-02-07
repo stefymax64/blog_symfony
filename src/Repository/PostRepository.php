@@ -7,6 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
+
 /**
  * @extends ServiceEntityRepository<Post>
  *
@@ -18,6 +19,7 @@ use Doctrine\Persistence\ManagerRegistry;
 class PostRepository extends ServiceEntityRepository
 {
     public const PAGINATOR_PER_PAGE = 1;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Post::class);
@@ -41,16 +43,19 @@ class PostRepository extends ServiceEntityRepository
         }
     }
 
-    public function getCommentPaginator(Post $post, int $offset): Paginator{
-        $query = $this->createQueryBuilder('c')
-            ->andWhere('c.post = :post')
-            ->setParameter('post', $post)
-            ->orderBy('c.publishedAt', 'DESC')
+    public function getPostPaginator( int $offset): Paginator
+    {
+        $query = $this->createQueryBuilder('p')
+            ->orderBy('p.publishedAt', 'DESC')
             ->setMaxResults(self::PAGINATOR_PER_PAGE)
             ->setFirstResult($offset)
             ->getQuery();
         return new Paginator($query);
     }
+
+
+
+
 
 //    /**
 //     * @return Post[] Returns an array of Post objects

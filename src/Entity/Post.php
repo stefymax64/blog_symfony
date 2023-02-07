@@ -13,6 +13,7 @@ class Post
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
+    # Mappe une propriété PHP à une colonne de la BDD
     #[ORM\Column]
     private ?int $id = null;
 
@@ -59,6 +60,7 @@ class Post
 
         return $this;
     }
+    //Méthode magique pour rendre les objets de la classe imprimables
     public function __toString()
     {
         return $this->getTitle();

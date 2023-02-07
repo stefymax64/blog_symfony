@@ -6,9 +6,11 @@
     <h2>{{ publication }}</h2>
     <p>{{ publication.content }}</p>
 
+{#    retourne le nombre de commentaires#}
     {% if comments|length > 0 %}
         {% for comment in comments %}
             <small>
+{#                Affiche la date dans un format lisible par l'internaute#}
                 {{ comment.publishedAt|format_datetime('medium', 'short') }}
             </small>
             <p>{{ comment.content }}</p>
@@ -16,6 +18,8 @@
     {% else%}
         <div>Il n'y a pas de commentaire pour cette publication</div>
     {% endif %}
+
+{#    Boucler sur les pages suivantes et précédentes#}
     {% if previous >= 0 %}
         <a href="{{ path('publication', {id: publication.id, offset: previous}) }}">Previous</a>
     {% endif %}
