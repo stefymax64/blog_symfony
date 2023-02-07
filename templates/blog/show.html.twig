@@ -19,6 +19,10 @@
         <div>Il n'y a pas de commentaire pour cette publication</div>
     {% endif %}
 
+{#    Formulaire pour ajouter un commentaire#}
+    <h2>Ajouter un commentaire</h2>
+    {{ form(comment_form) }}
+
 {#    Boucler sur les pages suivantes et précédentes#}
     {% if previous >= 0 %}
         <a href="{{ path('publication', {id: publication.id, offset: previous}) }}">Previous</a>
