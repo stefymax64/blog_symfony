@@ -38,10 +38,14 @@ class Post
     #[ORM\OneToMany(mappedBy: 'post', targetEntity: Tag::class)]
     private Collection $tags;
 
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'users_post')]
+    private Collection $users;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->tags = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -169,6 +173,33 @@ class Post
             if ($tag->getPost() === $this) {
                 $tag->setPost(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->addUsersPost($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            $user->removeUsersPost($this);
         }
 
         return $this;

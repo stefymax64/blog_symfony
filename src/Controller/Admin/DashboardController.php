@@ -51,7 +51,7 @@ class DashboardController extends AbstractDashboardController
 //    Relier les différents CRUD au tableau de bord
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToRoute('Retour au site', 'fa fa-home', 'homepage');
+        yield MenuItem::linkToRoute('Retour au site', 'fa fa-home', 'app_blog');
         yield MenuItem::linkToCrud('Publications', 'fa fa-clipboard', Post::class);
         yield MenuItem::linkToCrud('Commentaires', 'fa fa-comments', Comment::class);
         yield MenuItem::linkToCrud('Tags', 'fa fa-tag', Tag::class);
