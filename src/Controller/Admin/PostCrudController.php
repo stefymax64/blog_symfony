@@ -30,7 +30,6 @@ class PostCrudController extends AbstractCrudController
 //    Lister les champs de manière ordonnée dans la page d'édition d'une publication
     public function configureFields(string $pageName): iterable
     {
-        return
 //            Récupèrer les tags et les associer à la publication
             yield AssociationField::new('tags');
             yield TextField::new('title', "Titre");

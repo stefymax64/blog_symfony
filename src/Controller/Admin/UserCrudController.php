@@ -24,8 +24,8 @@ class UserCrudController extends AbstractCrudController
     }
 
     public function configureFields(string $pageName): iterable {
-        return[
-        yield TextField::new('username', "Nom d'utilisateur"),
+
+        yield TextField::new('username', "Nom d'utilisateur");
 
         yield TextField::new('password')
             ->setFormType(RepeatedType::class)
@@ -36,8 +36,7 @@ class UserCrudController extends AbstractCrudController
                 'mapped' => false,
             ])
             ->setRequired($pageName === Crud::PAGE_NEW)
-            ->onlyOnForms()
-        ];
+            ->onlyOnForms();
         //yield ChoiceField::new('roles')->setChoices($this->rolesHelper->getRoles())->allowMultipleChoices();
     }
 
