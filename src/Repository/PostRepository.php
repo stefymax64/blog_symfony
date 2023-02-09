@@ -18,13 +18,18 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class PostRepository extends ServiceEntityRepository
 {
-    public const PAGINATOR_PER_PAGE = 1;
+    private int $offset;
+    public const PAGINATOR_PER_PAGE = 2;
 
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Post::class);
     }
 
+    public function getDecalageSuivant() {
+
+        return $this->decalageSuivant ;
+    }
     public function save(Post $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
@@ -43,13 +48,20 @@ class PostRepository extends ServiceEntityRepository
         }
     }
 
-    public function getPostPaginator( int $offset): Paginator
+    public function getPostPaginator( int $page): Paginator
     {
+
+        $this->offset = $page * PostRepository::PAGINATOR_PER_PAGE - PostRepository::PAGINATOR_PER_PAGE;
+        $this->decalageSuivant = $this->offset + self::PAGINATOR_PER_PAGE ;
+
         $query = $this->createQueryBuilder('p')
-            ->orderBy('p.id', 'ASC')
+
+            ->orderBy('p.publishedAt', 'DESC')
             ->setMaxResults(self::PAGINATOR_PER_PAGE)
-            ->setFirstResult($offset)
-            ->getQuery();
+            ->setFirstResult($this->offset)
+            ->getQuery()
+        ;
+
         return new Paginator($query);
     }
 

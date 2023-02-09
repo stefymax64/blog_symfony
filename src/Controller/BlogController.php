@@ -28,28 +28,26 @@ class BlogController extends AbstractController
     #[Route('/page/{page<[1-9]\d{0,8}>}', name: 'app_blog_page', methods: ['GET'])]
 
     //Récupération des objets Request, PostRepository
-    public function index(Request $request, PostRepository $posts): Response
+    public function index(int $page,  PostRepository $postRepository): Response
     {
-        $offset = max(0, $request->query->getInt('offset', 0));
-        $paginator = $posts->getPostPaginator($offset);
-        $latestPosts = $paginator;
 
-        //retourne la vue avec la méthode render() et lui passe un array de $
+        $posts = $postRepository->getPostPaginator($page);
+
         return $this->render('blog/index.html.twig', [
+            'publications' => $posts,
+            'decalageSuivant' => $postRepository->getDecalageSuivant() ,
+            'current_page' => $page
 
-            'publications' => $latestPosts,
-            'previous' => $offset - PostRepository::PAGINATOR_PER_PAGE,
-            'next' => min(count($paginator), $offset + PostRepository::PAGINATOR_PER_PAGE),
         ]);
     }
 
     #Une instance de Post soit injectée dans la méthode en se basant sur l'{id} passé dans le chemin de la requête
     #[Route('/publication/{id}', name: 'publication')]
-    public function show(Request $request, Post $post, CommentRepository $commentRepository): Response{
-        //Le contrôleur récupère la valeur du décalage offset depuis les paramètres de l'url ($request->query) sous forme d'entier (getInt())
-        //Par défaut offset est à 0 si le paramètre n'est pas défini
+    public function show(Request $request, Post $post, CommentRepository $commentRepository): Response
+    {
         $offset = max(0, $request->query->getInt('offset', 0));
         $paginator = $commentRepository->getCommentPaginator($post, $offset);
+
         $comment = new Comment();
         //Méthode CreateForm() faisant partie d'AbstractController qui facilite la création de formulaires
         $form = $this->createForm(CommentFormType::class, $comment);
@@ -65,15 +63,15 @@ class BlogController extends AbstractController
             return $this->redirectToRoute('publication', ['id' => $post->getId()]);
         }
 
-        return $this->render('blog/show.html.twig',
-        [
-            'publication' => $post,
+        return $this->render('blog/show.html.twig', [
             'comments' => $paginator,
             'previous' => $offset - CommentRepository::PAGINATOR_PER_PAGE,
             'next' => min(count($paginator), $offset + CommentRepository::PAGINATOR_PER_PAGE),
-            //Transmettre le formulaire au template en utilisant createView() pour convertir les données dans un format adapté aux templates
+            'publication' => $post,
             'comment_form' => $form->createView(),
-            ]);
+        ]);
+
+
     }
 
 

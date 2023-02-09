@@ -9,8 +9,7 @@
         <div class="row">
             <div class="col-4"></div>
             <div class="col-4">
-                <h1 class="text-center my-4">Test de Bootstrap</h1>
-                <a href="" class="btn btn-primary">test</a>
+                <h1 class="text-center my-4">Bienvenue sur mon blog</h1>
             </div>
             <div class="col-4"></div>
         </div>
@@ -23,12 +22,23 @@
             <a href="{{ path('publication', {id: publication.id}) }}">Plus de détails</a>
         </p>
     {% endfor %}
-    {% if previous >= 0 %}
-        <a href="{{ path('app_blog', { offset: previous}) }}">Previous</a>
+
+    {% if current_page > 1 %}
+
+        <a href="{{ path('app_blog_page' , {  page: current_page - 1 }) }}"> << </a>
     {% endif %}
 
-    {% if next < publications|length %}
-        <a href="{{ path('app_blog', { offset: next}) }}">Next</a>
+    {% if decalageSuivant < publications.count  %}
+
+        <a href="{{ path('app_blog_page', {  page: current_page + 1 }) }}"> >> </a>
     {% endif %}
+
+{#    {% if previous >= 0 %}#}
+{#        <a href="{{ path('app_blog', { offset: previous}) }}">Previous</a>#}
+{#    {% endif %}#}
+
+{#    {% if next < publications|length %}#}
+{#        <a href="{{ path('app_blog', { offset: next}) }}">Next</a>#}
+{#    {% endif %}#}
 
 {% endblock %}
