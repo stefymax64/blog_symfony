@@ -7,6 +7,15 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+
+#[ApiResource(
+ collectionOperations: ['get', 'post'],
+ itemOperations: ['get', "put", "delete"]
+ )]
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 class Post
@@ -21,6 +30,7 @@ class Post
     private ?string $title = null;
 
     #[ORM\Column(length: 60)]
+    #[Groups(['conference:list', 'conference:item'])]
     private ?string $slug = null;
 
     #[ORM\Column(length: 255, nullable: true)]

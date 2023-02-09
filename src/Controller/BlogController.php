@@ -28,7 +28,7 @@ class BlogController extends AbstractController
     #[Route('/page/{page<[1-9]\d{0,8}>}', name: 'app_blog_page', methods: ['GET'])]
 
     //Récupération des objets Request, PostRepository
-    public function index(int $page,  PostRepository $postRepository): Response
+    public function index(PostRepository $postRepository, int $page = 1): Response
     {
 
         $posts = $postRepository->getPostPaginator($page);
