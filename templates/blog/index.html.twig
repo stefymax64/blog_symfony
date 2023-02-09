@@ -5,7 +5,16 @@
 {% block title %}Bienvenue sur mon blog !{% endblock %}
 
 {% block body %}
-
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-4"></div>
+            <div class="col-4">
+                <h1 class="text-center my-4">Test de Bootstrap</h1>
+                <a href="" class="btn btn-primary">test</a>
+            </div>
+            <div class="col-4"></div>
+        </div>
+    </div>
     {% for publication in publications  %}
 {#        notation utilisée pour afficher quelque chose#}
         <h4>{{ publication.title }}</h4>

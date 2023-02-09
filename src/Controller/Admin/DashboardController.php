@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Comment;
 use App\Entity\Post;
 use App\Entity\Tag;
+use App\Entity\User;
 
 class DashboardController extends AbstractDashboardController
 {
@@ -55,6 +56,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Publications', 'fa fa-clipboard', Post::class);
         yield MenuItem::linkToCrud('Commentaires', 'fa fa-comments', Comment::class);
         yield MenuItem::linkToCrud('Tags', 'fa fa-tag', Tag::class);
+        yield MenuItem::linkToCrud('User', 'fa fa-user', User::class);
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
     }
 }
