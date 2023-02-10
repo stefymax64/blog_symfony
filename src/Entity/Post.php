@@ -11,10 +11,13 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
- collectionOperations: ['get', 'post'],
- itemOperations: ['get', "put", "delete"]
+    normalizationContext: ['groups' => ['post:read']],
+    denormalizationContext: ['groups' => ['post:write']],
+    collectionOperations: ['get'],
+    itemOperations: ['get', 'put','delete']
  )]
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
@@ -24,19 +27,23 @@ class Post
     #[ORM\GeneratedValue]
     # Mappe une propriété PHP à une colonne de la BDD
     #[ORM\Column]
+    #[Groups(['post:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['post:read', 'post:write'])]
+    #[Assert\NotBlank]
     private ?string $title = null;
 
     #[ORM\Column(length: 60)]
-    #[Groups(['conference:list', 'conference:item'])]
+    #[Groups(['post:read', 'post:write'])]
     private ?string $slug = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $summary = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['post:read', 'post:write'])]
     private ?string $content = null;
 
     #[ORM\Column]
